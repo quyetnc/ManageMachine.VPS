@@ -1,0 +1,27 @@
+<div class="login-container" [style.backgroundImage]="backgroundImage">
+  <mat-card class="login-card">
+    <mat-card-header>
+      <mat-card-title>Quản lý khí tài thông tin</mat-card-title>
+      <mat-card-subtitle>Đăng nhập để tiếp tục </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Tài khoản</mat-label>
+          <input matInput formControlName="username" placeholder="Enter your username">
+          <mat-error *ngIf="f['username'].errors?.['required']">Tài khoản là bắt buộc</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Mật khẩu</mat-label>
+          <input matInput formControlName="password" type="password" placeholder="Enter your password">
+          <mat-error *ngIf="f['password'].errors?.['required']">Mật khẩu là bắt buộc</mat-error>
+        </mat-form-field>
+
+        <button mat-raised-button color="primary" class="full-width" [disabled]="loading || loginForm.invalid">
+          {{ loading ? 'Đang đăng nhập...' : 'Đăng nhập' }}
+        </button>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

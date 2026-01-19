@@ -1,0 +1,34 @@
+<div class="form-container">
+    <mat-card>
+        <mat-card-header>
+            <mat-card-title>{{ isEditMode ? 'Sửa thông tin thông số' : 'Thêm thông số mới' }}</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+            <form [formGroup]="paramForm" (ngSubmit)="onSubmit()">
+                <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Tên thông số</mat-label>
+                    <input matInput formControlName="name" placeholder="e.g., Rotation Speed">
+                    <mat-error>Required</mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Đơn vị</mat-label>
+                    <input matInput formControlName="unit" placeholder="e.g., RPM">
+                    <mat-error>Required</mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Mô tả</mat-label>
+                    <textarea matInput formControlName="description" rows="3"></textarea>
+                </mat-form-field>
+
+                <div class="actions">
+                    <button mat-button type="button" routerLink="/parameters">Hủy</button>
+                    <button mat-raised-button color="primary" type="submit" [disabled]="loading || paramForm.invalid">
+                        {{ loading ? 'Đang lưu...' : 'Lưu' }}
+                    </button>
+                </div>
+            </form>
+        </mat-card-content>
+    </mat-card>
+</div>

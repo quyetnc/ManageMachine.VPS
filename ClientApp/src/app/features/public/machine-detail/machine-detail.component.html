@@ -1,0 +1,101 @@
+<div class="mobile-app-container" *ngIf="machine">
+    <!-- Header -->
+    <div class="app-header">
+        <button mat-icon-button class="back-btn" (click)="goBack()">
+            <mat-icon>arrow_back</mat-icon>
+        </button>
+        <span class="header-title">Chi tiết máy móc</span>
+        <div class="header-actions">
+            <!-- Placeholder -->
+        </div>
+    </div>
+
+    <!-- Scrollable Content -->
+    <div class="content-scroll-area">
+        <div class="detail-header-card">
+            <div class="image-section">
+                <!-- Show Image if available -->
+                <img *ngIf="machine.imageUrl"
+                    [src]="machine.imageUrl.startsWith('http') ? machine.imageUrl : '/' + machine.imageUrl"
+                    class="machine-detail-img">
+                <!-- Fallback Icon -->
+                <mat-icon *ngIf="!machine.imageUrl">precision_manufacturing</mat-icon>
+            </div>
+            <div class="title-section">
+                <h2>{{ machine.name }}</h2>
+                <div style="font-size: 0.9rem; color: #555; margin-bottom: 4px;">Số hiệu: <b>{{ machine.serialNumber
+                        }}</b></div>
+                <span class="type-badge">{{ machine.machineType?.name }}</span>
+            </div>
+            <div class="status-section">
+                <span class="status-chip active">Hoạt động</span>
+                <span style="display: block; font-size: 0.8rem; color: #666; margin-top: 5px;">Ngày cấp: {{
+                    machine.dateIssued | date:'dd/MM/yyyy' }}</span>
+            </div>
+        </div>
+
+        <div class="info-card">
+            <h3>Trạng thái</h3>
+            <p>{{ machine.description || 'Không có trạng thái nào' }}</p>
+        </div>
+
+        <div class="info-card">
+            <h3>Thông số kỹ thuật</h3>
+
+            <div class="spec-row" *ngFor="let param of machine.parameters">
+                <span class="label">{{ param.parameterName }} ({{ param.parameterUnit }}):</span>
+                <span class="value">{{ param.value }}</span>
+            </div>
+
+            <div class="empty-specs" *ngIf="!machine.parameters || machine.parameters.length === 0">
+                <p>Không có thông số kỹ thuật nào được cấu hình.</p>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="actions-section" *ngIf="machine && currentUserId">
+            <ng-container
+                *ngIf="(machine.userId === currentUserId && !machine.tenantId) || (machine.tenantId === currentUserId)">
+                <button mat-flat-button color="primary" class="action-btn" *ngIf="!machine.pendingTransferRequestId"
+                    (click)="openTransferDialog()">
+                    <mat-icon>send</mat-icon> Chuyển máy móc
+                </button>
+                <div *ngIf="machine.pendingTransferRequestId" class="pending-section">
+                    <span class="status-msg warning">
+                        <mat-icon>pending</mat-icon> Yêu cầu chuyển máy móc đang chờ
+                    </span>
+                    <button mat-stroked-button color="warn" (click)="cancelRequest()">
+                        Hủy yêu cầu
+                    </button>
+                </div>
+            </ng-container>
+
+            <button mat-flat-button color="warn" class="action-btn" *ngIf="machine.tenantId === currentUserId"
+                (click)="returnMachine()">
+                <mat-icon>keyboard_return</mat-icon> Trả lại máy móc
+            </button>
+
+            <div *ngIf="machine.userId === currentUserId && machine.tenantId" class="status-msg info">
+                <mat-icon>info</mat-icon>
+                <span>Đã cho mượn cho: <strong>{{ machine.tenantName }}</strong> ({{ machine.status }})</span>
+            </div>
+
+            <div *ngIf="machine.tenantId === currentUserId" class="status-msg info">
+                <mat-icon>info</mat-icon>
+                <span>Được mượn từ: <strong>{{ machine.userFullName }}</strong> ({{ machine.status }})</span>
+            </div>
+
+            <!-- History Link Button -->
+            <button mat-stroked-button class="history-btn" (click)="viewHistory()">
+                <mat-icon>history</mat-icon> Lịch sử cho mượn hoặc sửa chữa
+            </button>
+        </div>
+
+
+    </div>
+</div>
+
+<div *ngIf="!machine" class="loading-state">
+    <mat-spinner diameter="32"></mat-spinner>
+    <p>Đang tải...</p>
+</div>

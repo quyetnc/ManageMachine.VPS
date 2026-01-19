@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: managemachine-db
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=YourStrong@Password123
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqlvolume:/var/opt/mssql
+
+  backend:
+    build:
+      context: .
+      dockerfile: ManageMachine.API/Dockerfile
+    container_name: managemachine-api
+    environment:
+      - ConnectionStrings__DefaultConnection=Server=db;Database=ManageMachineDb;User Id=sa;Password=YourStrong@Password123;TrustServerCertificate=True;MultipleActiveResultSets=true
+      - ASPNETCORE_URLS=http://+:8080
+    depends_on:
+      - db
+    ports:
+      - "8081:8080" # Map host 8081 to container 8080 to avoid conflict if any
+    volumes:
+      - ./uploads:/app/wwwroot/uploads
+
+  frontend:
+    build:
+      context: ./ClientApp
+      dockerfile: Dockerfile
+    container_name: managemachine-client
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./certs:/etc/nginx/certs
+    depends_on:
+      - backend
+
+volumes:
+  sqlvolume:

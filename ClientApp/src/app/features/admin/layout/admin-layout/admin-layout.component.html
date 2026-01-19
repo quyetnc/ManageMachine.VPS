@@ -1,0 +1,55 @@
+<mat-sidenav-container class="sidenav-container">
+    <mat-sidenav #drawer class="sidenav" fixedInViewport [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
+        [mode]="(isHandset$ | async) ? 'over' : 'side'" [opened]="(isHandset$ | async) === false">
+        <mat-toolbar>Menu</mat-toolbar>
+        <mat-nav-list>
+            <a mat-list-item routerLink="/dashboard" routerLinkActive="active-link">
+                <mat-icon matListItemIcon>dashboard</mat-icon>
+                <span matListItemTitle>Bảng điều khiển</span>
+            </a>
+            <a mat-list-item routerLink="/machines" routerLinkActive="active-link">
+                <mat-icon matListItemIcon>precision_manufacturing</mat-icon>
+                <span matListItemTitle>Các loại khí tài</span>
+            </a>
+            <a mat-list-item routerLink="/machine-types" routerLinkActive="active-link">
+                <mat-icon matListItemIcon>category</mat-icon>
+                <span matListItemTitle>Phân loại khí tài</span>
+            </a>
+            <a mat-list-item routerLink="/parameters" routerLinkActive="active-link">
+                <mat-icon matListItemIcon>Tình trạng kỹ thuật</mat-icon>
+                <span matListItemTitle>Thiết lập</span>
+            </a>
+            <a mat-list-item routerLink="/requests" routerLinkActive="active-link">
+                <mat-icon matListItemIcon>swap_horiz</mat-icon>
+                <span matListItemTitle>Đề nghị mượn, sửa chữa</span>
+            </a>
+            <a mat-list-item routerLink="/users" routerLinkActive="active-link">
+                <mat-icon matListItemIcon>people</mat-icon>
+                <span matListItemTitle>Đơn vị quản lí</span>
+            </a>
+            <a mat-list-item routerLink="/settings" routerLinkActive="active-link">
+                <mat-icon matListItemIcon>settings_applications</mat-icon>
+                <span matListItemTitle>Cài đặt</span>
+            </a>
+        </mat-nav-list>
+    </mat-sidenav>
+    <mat-sidenav-content>
+        <mat-toolbar color="primary">
+            <button type="button" aria-label="Toggle sidenav" mat-icon-button (click)="drawer.toggle()"
+                *ngIf="isHandset$ | async">
+                <mat-icon>menu</mat-icon>
+            </button>
+            <span>Quản lý khí tài thông tin</span>
+            <span class="spacer"></span>
+            <button mat-icon-button (click)="logout()">
+                <mat-icon>logout</mat-icon>
+            </button>
+        </mat-toolbar>
+        <div class="content-container">
+            <router-outlet></router-outlet>
+        </div>
+        <div class="app-footer">
+            &copy; 2026 ManageMachine. All rights reserved.
+        </div>
+    </mat-sidenav-content>
+</mat-sidenav-container>

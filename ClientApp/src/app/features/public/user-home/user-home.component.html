@@ -1,0 +1,92 @@
+<div class="mobile-app-container">
+    <!-- App Header -->
+    <div class="app-header">
+        <div class="header-content">
+            <div class="user-info">
+                <span class="greeting">Xin chào,</span>
+                <span class="app-name">Quản lí khí tài</span>
+            </div>
+            <button mat-icon-button class="logout-btn" (click)="logout()">
+                <mat-icon>logout</mat-icon>
+            </button>
+        </div>
+    </div>
+
+    <!-- Search Bar -->
+    <div class="search-section">
+        <div class="search-box">
+            <mat-icon class="search-icon">search</mat-icon>
+            <input type="text" [(ngModel)]="searchCode" (keyup.enter)="searchMachine()"
+                placeholder="Tìm kiếm khí tài theo mã (e.g. M-12345)...">
+            <button mat-icon-button *ngIf="searchCode" (click)="searchCode = ''">
+                <mat-icon>close</mat-icon>
+            </button>
+            <button mat-icon-button class="go-btn" (click)="searchMachine()" [disabled]="!searchCode">
+                <mat-icon>arrow_forward</mat-icon>
+            </button>
+        </div>
+    </div>
+
+    <!-- Scrollable Content -->
+    <div class="content-scroll-area">
+        <div class="section-title">
+            <h3>Loại khí tài</h3>
+            <span class="count-badge" *ngIf="!loading">{{ types.length }}</span>
+        </div>
+
+        <!-- Favorites / My Machines Section -->
+        <div class="my-machines-card" (click)="openMyMachines()" matRipple>
+            <div class="card-icon">
+                <mat-icon>assignment_ind</mat-icon>
+            </div>
+            <div class="card-info">
+                <span class="card-title">Danh sách khí tài đã được giao</span>
+                <span class="card-subtitle">Quản lý khí tài</span>
+            </div>
+            <mat-icon class="arrow">chevron_right</mat-icon>
+        </div>
+
+        <div class="grid-container" *ngIf="!loading">
+            <div class="category-card" *ngFor="let type of types" (click)="openType(type.id)" matRipple>
+                <div class="category-icon">
+                    <mat-icon>category</mat-icon>
+                </div>
+                <div class="category-details">
+                    <span class="category-name">{{ type.name }}</span>
+                    <span class="category-action">Xem <mat-icon>chevron_right</mat-icon></span>
+                </div>
+            </div>
+        </div>
+
+        <div *ngIf="loading" class="loading-state">
+            <mat-spinner diameter="32"></mat-spinner>
+            <span>Đang tải...</span>
+        </div>
+
+        <!-- Spacer for Bottom Bar -->
+        <div class="app-footer">
+            &copy; 2026 ManageMachine. All rights reserved.
+        </div>
+        <div class="bottom-spacer"></div>
+    </div>
+
+    <!-- Bottom Navigation Bar -->
+    <div class="bottom-nav-bar">
+        <div class="nav-item active">
+            <mat-icon>home</mat-icon>
+            <span>Trang chủ</span>
+        </div>
+
+        <!-- Floating Scan Button -->
+        <div class="scan-button-wrapper">
+            <button class="scan-fab" (click)="openScanner()" matRipple>
+                <mat-icon>qr_code_scanner</mat-icon>
+            </button>
+        </div>
+
+        <div class="nav-item" (click)="openProfile()">
+            <mat-icon>person</mat-icon>
+            <span>Thông tin</span>
+        </div>
+    </div>
+</div>
