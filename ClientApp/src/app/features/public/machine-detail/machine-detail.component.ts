@@ -115,10 +115,10 @@ export class MachineDetailComponent implements OnInit {
 
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       data: {
-        title: 'Return Machine',
-        message: 'Are you sure you want to return this machine?',
-        confirmText: 'Return',
-        cancelText: 'Cancel'
+        title: 'Trả lại thiết bị',
+        message: 'Bạn có chắc chắn muốn trả lại thiết bị này?',
+        confirmText: 'Trả lại',
+        cancelText: 'Hủy'
       }
     });
 
@@ -126,13 +126,13 @@ export class MachineDetailComponent implements OnInit {
       if (result) {
         this.machineService.returnMachine(this.machine!.id).subscribe({
           next: () => {
-            this.snackBar.open('Machine returned successfully', 'Close', { duration: 3000 });
+            this.snackBar.open('Đã trả lại thiết bị', 'Close', { duration: 3000 });
             if (this.machine) {
               this.loadDetail(this.machine.id); // Reload to update status
             }
           },
           error: (err) => {
-            this.snackBar.open('Failed to return machine', 'Close', { duration: 3000 });
+            this.snackBar.open('Không thể trả lại thiết bị', 'Close', { duration: 3000 });
           }
         });
       }

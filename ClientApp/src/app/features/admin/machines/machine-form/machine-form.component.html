@@ -72,15 +72,7 @@
                     </mat-form-field>
                 </div>
 
-                <h3>Thông số</h3>
-                <div formArrayName="parameters">
-                    <div *ngFor="let param of parameters.controls; let i=index" [formGroupName]="i" class="param-row">
-                        <mat-form-field appearance="outline" class="full-width">
-                            <mat-label>{{ getParameterName(i) }}</mat-label>
-                            <input matInput formControlName="value">
-                        </mat-form-field>
-                    </div>
-                </div>
+
 
                 <div class="actions">
                     <button mat-button type="button" routerLink="/machines">Hủy</button>

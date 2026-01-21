@@ -58,54 +58,5 @@ namespace ManageMachine.API.Controllers
         }
     }
 
-    [ApiController]
-    [Route("api/parameters")]
-    [Authorize] // Allow any authenticated user by default
-    public class ParametersController : ControllerBase
-    {
-        private readonly IParameterService _service;
 
-        public ParametersController(IParameterService service)
-        {
-            _service = service;
-        }
-
-        [HttpGet]
-        public async Task<ActionResult<IReadOnlyList<ParameterDto>>> GetAll()
-        {
-            return Ok(await _service.GetAllAsync());
-        }
-
-        [HttpGet("{id}")]
-        public async Task<ActionResult<ParameterDto>> GetById(int id)
-        {
-            var item = await _service.GetByIdAsync(id);
-            if (item == null) return NotFound();
-            return Ok(item);
-        }
-
-        [HttpPost]
-        [Authorize(Roles = "Admin")]
-        public async Task<ActionResult<ParameterDto>> Create(CreateParameterDto dto)
-        {
-            var result = await _service.CreateAsync(dto);
-            return Ok(result);
-        }
-
-        [HttpPut("{id}")]
-        [Authorize(Roles = "Admin")]
-        public async Task<ActionResult> Update(int id, CreateParameterDto dto)
-        {
-            await _service.UpdateAsync(id, dto);
-            return NoContent();
-        }
-
-        [HttpDelete("{id}")]
-        [Authorize(Roles = "Admin")]
-        public async Task<ActionResult> Delete(int id)
-        {
-            await _service.DeleteAsync(id);
-            return NoContent();
-        }
-    }
 }

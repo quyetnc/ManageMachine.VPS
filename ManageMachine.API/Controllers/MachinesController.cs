@@ -105,13 +105,7 @@ namespace ManageMachine.API.Controllers
             return NoContent();
         }
 
-        [HttpPost("{id}/parameters")]
-        [Authorize(Roles = "Admin")]
-        public async Task<ActionResult> AddParameter(int id, CreateMachineParameterDto paramDto)
-        {
-            await _service.AddParameterToMachineAsync(id, paramDto);
-            return Ok();
-        }
+
         [HttpPost("{id}/return")]
         public async Task<IActionResult> ReturnMachine(int id)
         {

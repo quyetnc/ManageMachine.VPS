@@ -17,7 +17,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./machine-list.component.scss']
 })
 export class MachineListComponent implements OnInit {
-  displayedColumns: string[] = ['select', 'image', 'name', 'code', 'dateIssued', 'type', 'ownership', 'parameters', 'description', 'actions'];
+  displayedColumns: string[] = ['select', 'image', 'name', 'code', 'dateIssued', 'type', 'ownership', 'description', 'actions'];
   dataSource: MatTableDataSource<Machine>;
   selection = new SelectionModel<Machine>(true, []);
 

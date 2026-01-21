@@ -18,13 +18,7 @@ namespace ManageMachine.Application.Mappings
             CreateMap<MachineType, MachineTypeDto>().ReverseMap();
             CreateMap<MachineType, CreateMachineTypeDto>().ReverseMap();
 
-            CreateMap<Parameter, ParameterDto>().ReverseMap();
-            CreateMap<Parameter, CreateParameterDto>().ReverseMap();
 
-            CreateMap<MachineParameter, MachineParameterDto>()
-                .ForMember(dest => dest.ParameterName, opt => opt.MapFrom(src => src.Parameter.Name))
-                .ForMember(dest => dest.ParameterUnit, opt => opt.MapFrom(src => src.Parameter.Unit));
-            CreateMap<CreateMachineParameterDto, MachineParameter>();
 
             CreateMap<Machine, MachineDto>()
                 .ForMember(dest => dest.MachineTypeName, opt => opt.MapFrom(src => src.MachineType.Name))

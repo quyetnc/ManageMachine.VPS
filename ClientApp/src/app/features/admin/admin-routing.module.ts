@@ -17,10 +17,7 @@ const routes: Routes = [
         path: 'machine-types',
         loadChildren: () => import('./machine-types/machine-types.module').then(m => m.MachineTypesModule)
       },
-      {
-        path: 'parameters',
-        loadChildren: () => import('./parameters/parameters.module').then(m => m.ParametersModule)
-      },
+
       {
         path: 'users',
         loadChildren: () => import('./users/users.module').then(m => m.UsersModule)

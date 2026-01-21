@@ -39,7 +39,7 @@
                         </div>
                         <div class="content-body">
                             <ng-container *ngIf="record.requestType === 2; else transferDesc">
-                                <p><strong>{{ record.fromUserName }}</strong> returned the machine.</p>
+                                <p><strong>{{ record.fromUserName }}</strong> đã trả lại thiết bị.</p>
                             </ng-container>
                             <ng-template #transferDesc>
                                 <p><strong>{{ record.fromUserName }}</strong> <mat-icon

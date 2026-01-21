@@ -16,7 +16,7 @@ namespace ManageMachine.Application.Services
         Task<IReadOnlyList<MachineDto>> GetByUserIdAsync(int userId);
 
         // Parameter logic can be here or separate if complex
-        Task AddParameterToMachineAsync(int machineId, CreateMachineParameterDto paramDto);
+
 
         Task ReturnMachineAsync(int machineId, int userId);
         Task<IReadOnlyList<MachineTransferRequestDto>> GetHistoryAsync(int machineId);

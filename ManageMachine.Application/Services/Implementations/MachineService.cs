@@ -13,21 +13,16 @@ namespace ManageMachine.Application.Services.Implementations
     public class MachineService : IMachineService
     {
         private readonly IMachineRepository _machineRepository;
-        private readonly IGenericRepository<MachineParameter> _machineParameterRepository;
-        private readonly IGenericRepository<Parameter> _parameterRepository;
         private readonly IGenericRepository<MachineTransferRequest> _requestRepository;
         private readonly IMapper _mapper;
 
         public MachineService(
             IMachineRepository machineRepository,
-            IGenericRepository<MachineParameter> machineParameterRepository,
-            IGenericRepository<Parameter> parameterRepository,
             IGenericRepository<MachineTransferRequest> requestRepository,
             IMapper mapper)
         {
             _machineRepository = machineRepository;
-            _machineParameterRepository = machineParameterRepository;
-            _parameterRepository = parameterRepository;
+
             _requestRepository = requestRepository;
             _mapper = mapper;
         }
@@ -201,55 +196,12 @@ namespace ManageMachine.Application.Services.Implementations
                 machine.DateIssued = updateDto.DateIssued.Value;
             }
 
-            // 3. Sync Parameters
-            if (updateDto.Parameters != null)
-            {
-                // Update existing or Add new
-                foreach (var paramDto in updateDto.Parameters)
-                {
-                    var existingParam = machine.Parameters.FirstOrDefault(p => p.ParameterId == paramDto.ParameterId);
-                    if (existingParam != null)
-                    {
-                        // Update
-                        existingParam.Value = paramDto.Value;
-                    }
-                    else
-                    {
-                        // Add New
-                        machine.Parameters.Add(new MachineParameter
-                        {
-                            MachineId = machine.Id,
-                            ParameterId = paramDto.ParameterId,
-                            Value = paramDto.Value
-                        });
-                    }
-                }
 
-                // Optional: Remove parameters not in DTO? 
-                // If the UI sends ALL active parameters, then missing ones implies deletion.
-                // Let's assume yes for a full update.
-                var dtoParamIds = updateDto.Parameters.Select(p => p.ParameterId).ToList();
-                var paramsToRemove = machine.Parameters.Where(p => !dtoParamIds.Contains(p.ParameterId)).ToList();
-                
-                foreach (var p in paramsToRemove)
-                {
-                    machine.Parameters.Remove(p);
-                }
-            }
 
             await _machineRepository.UpdateAsync(machine);
         }
 
-        public async Task AddParameterToMachineAsync(int machineId, CreateMachineParameterDto paramDto)
-        {
-            var machineParam = new MachineParameter
-            {
-                MachineId = machineId,
-                ParameterId = paramDto.ParameterId,
-                Value = paramDto.Value
-            };
-            await _machineParameterRepository.AddAsync(machineParam);
-        }
+
         public async Task<IReadOnlyList<MachineTransferRequestDto>> GetHistoryAsync(int machineId)
         {
             // Use same DTO as requests for simplicity, or create specific History DTO.

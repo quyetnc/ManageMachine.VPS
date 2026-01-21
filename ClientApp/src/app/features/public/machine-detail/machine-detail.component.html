@@ -39,18 +39,7 @@
             <p>{{ machine.description || 'Không có trạng thái nào' }}</p>
         </div>
 
-        <div class="info-card">
-            <h3>Thông số kỹ thuật</h3>
 
-            <div class="spec-row" *ngFor="let param of machine.parameters">
-                <span class="label">{{ param.parameterName }} ({{ param.parameterUnit }}):</span>
-                <span class="value">{{ param.value }}</span>
-            </div>
-
-            <div class="empty-specs" *ngIf="!machine.parameters || machine.parameters.length === 0">
-                <p>Không có thông số kỹ thuật nào được cấu hình.</p>
-            </div>
-        </div>
 
         <!-- Action Buttons -->
         <div class="actions-section" *ngIf="machine && currentUserId">

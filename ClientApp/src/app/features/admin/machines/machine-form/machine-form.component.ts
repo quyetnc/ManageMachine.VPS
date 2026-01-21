@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MachineService, MachineType, Parameter } from 'src/app/core/services/machine.service';
+import { MachineService, MachineType } from 'src/app/core/services/machine.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { UserService } from 'src/app/core/services/user.service';
 import { User } from 'src/app/core/models/user.model';
@@ -16,7 +16,6 @@ export class MachineFormComponent implements OnInit {
   isEditMode = false;
   machineId: number | null = null;
   machineTypes: MachineType[] = [];
-  availableParameters: Parameter[] = [];
   users: User[] = [];
   loading = false;
   imagePreview: string | null = null;
@@ -37,7 +36,6 @@ export class MachineFormComponent implements OnInit {
       machineTypeId: ['', Validators.required],
       dateIssued: [new Date()], // Default to today
       userId: [null], // Owner
-      parameters: this.fb.array([])
     });
   }
 
@@ -48,16 +46,7 @@ export class MachineFormComponent implements OnInit {
       this.machineService.uploadImage(file).subscribe({
         next: (res) => {
           this.machineForm.patchValue({ imageUrl: res.url });
-          this.imagePreview = res.url; // Use relative path, might need base depending on setup
-          // Ideally backend returns full URL or we prepend base
-          // Since we used static files, if we return "uploads/file.jpg", we need to prepend API url or base.
-          // Let's assume we need to prepend environment.apiUrl base or similar.
-          // Actually, if served from API wwwroot, it is `http://localhost:5037/uploads/...`
-          // Let's just store the returned URL if it's relative?
-          // Wait, upload controller returns "uploads/..."
-          // We should probably fix the controller to return suitable path or handle it here.
-          // Let's assume for now we use the path as is and fix display if broken.
-          // Better: We stored "uploads/..." in DB.
+          this.imagePreview = res.url;
           this.loading = false;
         },
         error: (err) => {
@@ -88,22 +77,14 @@ export class MachineFormComponent implements OnInit {
 
   loadMasterData() {
     this.loading = true;
-    // chain requests or use forkJoin
     this.machineService.getMachineTypes().subscribe({
       next: (types) => {
         this.machineTypes = types;
-        this.machineService.getParameters().subscribe({
-          next: (params) => {
-            this.availableParameters = params;
-            if (this.isEditMode && this.machineId) {
-              this.loadMachine(this.machineId);
-            } else {
-              this.initParameters();
-              this.loading = false;
-            }
-          },
-          error: (err) => this.handleError('Failed to load parameters', err)
-        });
+        if (this.isEditMode && this.machineId) {
+          this.loadMachine(this.machineId);
+        } else {
+          this.loading = false;
+        }
       },
       error: (err) => this.handleError('Failed to load machine types', err)
     });
@@ -123,45 +104,10 @@ export class MachineFormComponent implements OnInit {
         });
 
         this.imagePreview = machine.imageUrl;
-
-        // Map existing parameters
-        const paramControl = this.machineForm.get('parameters') as FormArray;
-        paramControl.clear(); // Clear default init
-
-        // We want to show ALL available parameters, pre-filled if value exists
-        this.availableParameters.forEach(p => {
-          const existing = machine.parameters?.find(mp => mp.parameterId === p.id);
-          paramControl.push(this.createParameterGroup(p.id, existing ? existing.value : ''));
-        });
-
         this.loading = false;
       },
       error: (err) => this.handleError('Failed to load machine details', err)
     });
-  }
-
-  initParameters() {
-    const paramControl = this.machineForm.get('parameters') as FormArray;
-    this.availableParameters.forEach(p => {
-      paramControl.push(this.createParameterGroup(p.id, ''));
-    });
-  }
-
-  createParameterGroup(paramId: number, value: string): FormGroup {
-    return this.fb.group({
-      parameterId: [paramId],
-      value: [value] // Optional, add validators if needed
-    });
-  }
-
-  get parameters() {
-    return this.machineForm.get('parameters') as FormArray;
-  }
-
-  getParameterName(index: number): string {
-    const pId = this.parameters.at(index).value.parameterId;
-    const p = this.availableParameters.find(x => x.id === pId);
-    return p ? `${p.name} (${p.unit})` : 'Unknown';
   }
 
   onSubmit() {
@@ -170,13 +116,7 @@ export class MachineFormComponent implements OnInit {
     this.loading = true;
     const formValue = this.machineForm.value;
 
-    // Filter out empty parameters if desired, or send all
-    // For now, let's send all populated ones
-    const cleanedParams = formValue.parameters.filter((p: any) => p.value !== '' && p.value !== null);
-    formValue.parameters = cleanedParams;
-
     if (this.isEditMode && this.machineId) {
-      // Implement Update Logic in Service first if not exists (PUT)
       this.machineService.updateMachine(this.machineId, formValue).subscribe({
         next: () => this.onSuccess('Machine updated successfully'),
         error: (err) => this.handleError('Failed to update machine', err)

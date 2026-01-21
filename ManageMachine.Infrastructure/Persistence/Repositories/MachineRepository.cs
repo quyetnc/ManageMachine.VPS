@@ -15,8 +15,7 @@ namespace ManageMachine.Infrastructure.Persistence.Repositories
         {
             return await _context.Machines
                 .Include(m => m.MachineType)
-                .Include(m => m.Parameters)
-                    .ThenInclude(mp => mp.Parameter)
+
                 .Include(m => m.TransferRequests)
                 .Include(m => m.Tenant)
                 .Include(m => m.User)
@@ -27,8 +26,7 @@ namespace ManageMachine.Infrastructure.Persistence.Repositories
         {
             return await _context.Machines
                 .Include(m => m.MachineType)
-                .Include(m => m.Parameters)
-                    .ThenInclude(mp => mp.Parameter)
+
                 .Include(m => m.TransferRequests)
                 .Include(m => m.User)
                 .Include(m => m.Tenant)

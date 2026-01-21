@@ -14,7 +14,6 @@ export interface Machine {
   machineTypeId: number;
   machineTypeName: string;
   machineType?: MachineType;
-  parameters: MachineParameter[];
   userId?: number;
   userFullName?: string;
   tenantId?: number;
@@ -23,31 +22,13 @@ export interface Machine {
   pendingTransferRequestId?: number;
 }
 
-export interface MachineParameter {
-  id?: number;
-  parameterId: number;
-  parameterName: string;
-  parameterUnit: string;
-  value: string;
-}
-
 export interface MachineType {
   id: number;
   name: string;
   description: string;
 }
 
-export interface Parameter {
-  id: number;
-  name: string;
-  unit: string;
-  description: string;
-}
 
-export interface CreateMachineParameterDto {
-  parameterId: number;
-  value: string;
-}
 
 @Injectable({
   providedIn: 'root'
@@ -110,24 +91,7 @@ export class MachineService {
     return this.api.delete(`types/${id}`);
   }
 
-  // Parameters
-  getParameters(): Observable<Parameter[]> {
-    return this.api.get('parameters'); // Match backend route "api/parameters"
-  }
 
-  getParameter(id: number): Observable<Parameter> {
-    return this.api.get(`parameters/${id}`);
-  }
-
-  createParameter(data: any): Observable<Parameter> {
-    return this.api.post('parameters', data);
-  }
-
-  // New method: addParameter
-  addParameter(machineId: number, param: CreateMachineParameterDto): Observable<void> {
-    // Assuming api.post can handle the DTO and constructs the URL correctly
-    return this.api.post<void>(`Machines/${machineId}/parameters`, param);
-  }
 
   // New method: uploadImage
   uploadImage(file: File): Observable<{ url: string }> {
@@ -140,13 +104,7 @@ export class MachineService {
     return this.http.post(`${environment.apiUrl}/Machines/${id}/return`, {});
   }
 
-  updateParameter(id: number, data: any): Observable<void> {
-    return this.api.put(`parameters/${id}`, data);
-  }
 
-  deleteParameter(id: number): Observable<void> {
-    return this.api.delete(`parameters/${id}`);
-  }
 
   getHistory(id: number): Observable<any[]> {
     return this.api.get<any[]>(`Machines/${id}/history`);

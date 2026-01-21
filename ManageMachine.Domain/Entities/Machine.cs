@@ -24,7 +24,7 @@ namespace ManageMachine.Domain.Entities
         public User? Tenant { get; set; } // Current Holder
         public MachineStatus Status { get; set; } = MachineStatus.Available;
 
-        public ICollection<MachineParameter> Parameters { get; set; } = new List<MachineParameter>();
+
         public ICollection<MachineTransferRequest> TransferRequests { get; set; } = new List<MachineTransferRequest>();
     }
 }

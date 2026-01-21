@@ -15,7 +15,7 @@ namespace ManageMachine.Application
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IMachineService, MachineService>();
             services.AddScoped<IMachineTypeService, MachineTypeService>();
-            services.AddScoped<IParameterService, ParameterService>();
+
             services.AddScoped<IDashboardService, DashboardService>();
 
             return services;

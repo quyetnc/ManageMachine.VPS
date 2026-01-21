@@ -19,12 +19,5 @@ namespace ManageMachine.Application.Services
         Task<DashboardStatsDto> GetStatsAsync();
     }
 
-    public interface IParameterService
-    {
-        Task<IReadOnlyList<ParameterDto>> GetAllAsync();
-        Task<ParameterDto?> GetByIdAsync(int id);
-        Task<ParameterDto> CreateAsync(CreateParameterDto createDto);
-        Task UpdateAsync(int id, CreateParameterDto updateDto);
-        Task DeleteAsync(int id);
-    }
+
 }
