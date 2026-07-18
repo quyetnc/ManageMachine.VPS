@@ -21,5 +21,7 @@ namespace ManageMachine.Domain.Entities
         
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime? ResolvedAt { get; set; }
+        
+        public int? AdminId { get; set; } // Tenant
     }
 }

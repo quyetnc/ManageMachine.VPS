@@ -13,12 +13,22 @@ const routes: Routes = [
     loadChildren: () => import('./features/public/public.module').then(m => m.PublicModule)
   },
   {
-    path: '',
+    path: 'admin',
     loadChildren: () => import('./features/admin/admin.module').then(m => m.AdminModule),
-    canActivate: [AuthGuard, AdminGuard]
+    canActivate: [AdminGuard]
+  },
+  {
+    path: 'super-admin',
+    loadChildren: () => import('./features/super-admin/super-admin.module').then(m => m.SuperAdminModule),
+    canActivate: [AdminGuard]
+  },
+  {
+    path: '',
+    redirectTo: 'public',
+    pathMatch: 'full'
   },
   // Fallback
-  { path: '**', redirectTo: '' }
+  { path: '**', redirectTo: 'public' }
 ];
 
 @NgModule({

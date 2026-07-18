@@ -63,7 +63,7 @@ export class TypeFormComponent implements OnInit {
 
   onSuccess(msg: string) {
     this.snackBar.open(msg, 'Close', { duration: 3000 });
-    this.router.navigate(['/machine-types']);
+    this.router.navigate(['/admin/machine-types']);
   }
 
   onError(msg: string, err: any) {

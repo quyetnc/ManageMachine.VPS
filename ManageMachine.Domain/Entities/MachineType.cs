@@ -9,6 +9,7 @@ namespace ManageMachine.Domain.Entities
         public string Description { get; set; } = string.Empty;
 
         // Navigation property for Machines of this type
+        public int? AdminId { get; set; } // Tenant
         public ICollection<Machine> Machines { get; set; } = new List<Machine>();
     }
 }

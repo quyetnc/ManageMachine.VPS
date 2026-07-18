@@ -24,6 +24,22 @@ export class AuthService {
     return this.currentUserSubject.value;
   }
 
+  get role(): string {
+    return this.currentUserValue ? this.currentUserValue.role : '';
+  }
+
+  get isAdmin(): boolean {
+    return this.role === 'Admin' || this.role === 'SuperAdmin';
+  }
+
+  get isSuperAdmin(): boolean {
+    return this.role === 'SuperAdmin';
+  }
+
+  isLoggedIn(): boolean {
+    return !!this.currentUserValue;
+  }
+
   login(loginData: any) {
     return this.http.post<any>(`${this.apiUrl}/login`, loginData)
       .pipe(map(response => {

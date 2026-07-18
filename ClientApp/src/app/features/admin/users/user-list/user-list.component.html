@@ -1,7 +1,7 @@
 <div class="list-container">
     <div class="header">
-        <h2>Đơn vị quản lí</h2>
-        <button mat-raised-button color="primary" routerLink="/users/create">
+        <h2>{{ authService.isSuperAdmin ? 'Quản lý Admin' : 'Đơn vị quản lí' }}</h2>
+        <button mat-raised-button color="primary" routerLink="/admin/users/create">
             <mat-icon>add</mat-icon> Tạo mới
         </button>
     </div>
@@ -37,7 +37,7 @@
             <ng-container matColumnDef="actions">
                 <th mat-header-cell *matHeaderCellDef> Thay đổi </th>
                 <td mat-cell *matCellDef="let user">
-                    <button mat-icon-button color="primary" [routerLink]="['/users/edit', user.id]" title="Edit">
+                    <button mat-icon-button color="primary" [routerLink]="['/admin/users/edit', user.id]" title="Edit">
                         <mat-icon>edit</mat-icon>
                     </button>
                     <button mat-icon-button color="accent" (click)="resetPassword(user)" title="Reset Password">

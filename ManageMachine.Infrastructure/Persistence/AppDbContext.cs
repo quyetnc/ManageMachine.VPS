@@ -5,8 +5,11 @@ namespace ManageMachine.Infrastructure.Persistence
 {
     public class AppDbContext : DbContext
     {
-        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
+        private readonly ManageMachine.Application.Common.ICurrentUserService _currentUserService;
+
+        public AppDbContext(DbContextOptions<AppDbContext> options, ManageMachine.Application.Common.ICurrentUserService currentUserService) : base(options)
         {
+            _currentUserService = currentUserService;
         }
 
         public DbSet<User> Users { get; set; }
@@ -18,6 +21,12 @@ namespace ManageMachine.Infrastructure.Persistence
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            // Global Query Filters for Multi-tenancy
+            modelBuilder.Entity<User>().HasQueryFilter(e => _currentUserService.Role == Domain.Enums.UserRole.SuperAdmin || e.AdminId == _currentUserService.AdminId);
+            modelBuilder.Entity<Machine>().HasQueryFilter(e => _currentUserService.Role == Domain.Enums.UserRole.SuperAdmin || e.AdminId == _currentUserService.AdminId);
+            modelBuilder.Entity<MachineType>().HasQueryFilter(e => _currentUserService.Role == Domain.Enums.UserRole.SuperAdmin || e.AdminId == _currentUserService.AdminId);
+            modelBuilder.Entity<MachineTransferRequest>().HasQueryFilter(e => _currentUserService.Role == Domain.Enums.UserRole.SuperAdmin || e.AdminId == _currentUserService.AdminId);
 
 
 

@@ -26,8 +26,16 @@ namespace ManageMachine.API.Controllers
             return Ok(users);
         }
 
+        [HttpGet("admins")]
+        [Authorize(Roles = "SuperAdmin")]
+        public async Task<IActionResult> GetAdmins()
+        {
+            var admins = await _userService.GetAdminsAsync();
+            return Ok(admins);
+        }
+
         [HttpPost]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,SuperAdmin")]
         public async Task<IActionResult> Create([FromBody] CreateUserDto createUserDto)
         {
             try
@@ -57,7 +65,7 @@ namespace ManageMachine.API.Controllers
         }
 
         [HttpPut("{id}")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,SuperAdmin")]
         public async Task<IActionResult> Update(int id, [FromBody] UpdateUserDto updateUserDto)
         {
             try
@@ -72,7 +80,7 @@ namespace ManageMachine.API.Controllers
         }
 
         [HttpDelete("{id}")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,SuperAdmin")]
         public async Task<IActionResult> Delete(int id)
         {
             try

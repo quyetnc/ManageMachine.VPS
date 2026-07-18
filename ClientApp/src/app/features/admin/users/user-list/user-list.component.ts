@@ -7,6 +7,7 @@ import { User, UserRole } from 'src/app/core/models/user.model';
 import { UserService } from 'src/app/core/services/user.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from 'src/app/shared/components/confirm-dialog/confirm-dialog.component';
+import { AuthService } from 'src/app/core/services/auth.service';
 
 @Component({
   selector: 'app-user-list',
@@ -20,7 +21,12 @@ export class UserListComponent implements OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  constructor(private userService: UserService, private snackBar: MatSnackBar, private dialog: MatDialog) {
+  constructor(
+    private userService: UserService,
+    private snackBar: MatSnackBar,
+    private dialog: MatDialog,
+    public authService: AuthService
+  ) {
     this.dataSource = new MatTableDataSource();
   }
 

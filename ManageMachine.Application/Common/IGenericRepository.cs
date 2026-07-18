@@ -17,6 +17,7 @@ namespace ManageMachine.Application.Common
         Task<IReadOnlyList<T>> GetAsync(
             Expression<Func<T, bool>>? predicate = null,
             Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null,
-            string? includeProperties = null);
+            string? includeProperties = null,
+            bool ignoreQueryFilters = false);
     }
 }

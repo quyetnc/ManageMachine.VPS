@@ -25,6 +25,7 @@ namespace ManageMachine.Domain.Entities
         public MachineStatus Status { get; set; } = MachineStatus.Available;
 
 
+        public int? AdminId { get; set; } // Tenant
         public ICollection<MachineTransferRequest> TransferRequests { get; set; } = new List<MachineTransferRequest>();
     }
 }

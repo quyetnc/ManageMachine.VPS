@@ -37,6 +37,21 @@ namespace ManageMachine.Infrastructure.Persistence.Seeders
             }
             await _context.SaveChangesAsync();
 
+            // 1.1 Seed SuperAdmin
+            if (!await _context.Users.AnyAsync(u => u.Role == Domain.Enums.UserRole.SuperAdmin))
+            {
+                var superAdmin = new User
+                {
+                    FullName = "Super Administrator",
+                    Username = "superadmin",
+                    PasswordHash = BCrypt.Net.BCrypt.HashPassword("superadmin"),
+                    Email = "superadmin@managemachine.com",
+                    Role = Domain.Enums.UserRole.SuperAdmin
+                };
+                _context.Users.Add(superAdmin);
+                await _context.SaveChangesAsync();
+            }
+
             // 2. Update existing users with realistic names if they have generic names like "User 1"
             // Or just ensure we have some users to assign machines to.
             var users = await _context.Users.ToListAsync();

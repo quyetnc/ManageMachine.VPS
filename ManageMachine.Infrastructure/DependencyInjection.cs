@@ -21,6 +21,9 @@ namespace ManageMachine.Infrastructure
             services.AddScoped<IMachineRepository, MachineRepository>();
             services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
             services.AddScoped<DbSeeder>(); // Register Seeder
+            
+            services.AddHttpContextAccessor();
+            services.AddScoped<ICurrentUserService, Services.CurrentUserService>();
 
             return services;
         }

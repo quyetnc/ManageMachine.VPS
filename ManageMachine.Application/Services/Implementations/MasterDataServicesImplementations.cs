@@ -11,16 +11,19 @@ namespace ManageMachine.Application.Services.Implementations
     {
         private readonly IGenericRepository<MachineType> _repository;
         private readonly IMapper _mapper;
+        private readonly ICurrentUserService _currentUserService;
 
-        public MachineTypeService(IGenericRepository<MachineType> repository, IMapper mapper)
+        public MachineTypeService(IGenericRepository<MachineType> repository, IMapper mapper, ICurrentUserService currentUserService)
         {
             _repository = repository;
             _mapper = mapper;
+            _currentUserService = currentUserService;
         }
 
         public async Task<MachineTypeDto> CreateAsync(CreateMachineTypeDto createDto)
         {
             var entity = _mapper.Map<MachineType>(createDto);
+            entity.AdminId = _currentUserService.AdminId;
             await _repository.AddAsync(entity);
             return _mapper.Map<MachineTypeDto>(entity);
         }

@@ -1,0 +1,10 @@
+<div class="super-admin-layout">
+    <mat-toolbar color="warn">
+        <span>ManageMachine - Super Admin</span>
+        <span class="spacer"></span>
+        <button mat-button routerLink="/auth/login" (click)="logout()">Logout</button>
+    </mat-toolbar>
+    <div class="content">
+        <router-outlet></router-outlet>
+    </div>
+</div>

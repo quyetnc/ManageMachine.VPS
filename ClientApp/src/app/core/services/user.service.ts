@@ -3,6 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { CreateUserDto, ResetPasswordDto, UpdateUserDto, User } from '../models/user.model';
+import { AdminSummary } from '../models/admin-summary.model';
+
 export { User };
 
 @Injectable({
@@ -15,6 +17,10 @@ export class UserService {
 
   getAll(): Observable<User[]> {
     return this.http.get<User[]>(this.apiUrl);
+  }
+
+  getAdmins(): Observable<AdminSummary[]> {
+    return this.http.get<AdminSummary[]>(`${this.apiUrl}/admins`);
   }
 
   create(user: CreateUserDto): Observable<User> {

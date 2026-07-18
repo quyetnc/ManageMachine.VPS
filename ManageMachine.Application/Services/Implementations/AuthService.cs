@@ -23,7 +23,7 @@ namespace ManageMachine.Application.Services.Implementations
 
         public async Task<AuthResponseDto> LoginAsync(LoginDto loginDto)
         {
-            var users = await _userRepository.GetAsync(u => u.Username == loginDto.Username);
+            var users = await _userRepository.GetAsync(u => u.Username == loginDto.Username, ignoreQueryFilters: true);
             var user = users.FirstOrDefault();
 
             if (user == null || !BCrypt.Net.BCrypt.Verify(loginDto.Password, user.PasswordHash))
@@ -40,7 +40,7 @@ namespace ManageMachine.Application.Services.Implementations
 
         public async Task<AuthResponseDto> RegisterAsync(RegisterDto registerDto)
         {
-            var existing = await _userRepository.GetAsync(u => u.Username == registerDto.Username);
+            var existing = await _userRepository.GetAsync(u => u.Username == registerDto.Username, ignoreQueryFilters: true);
             if (existing.Any())
             {
                 throw new Exception("Username already exists");
@@ -50,6 +50,13 @@ namespace ManageMachine.Application.Services.Implementations
             user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(registerDto.Password);
             
             await _userRepository.AddAsync(user);
+
+            // If registering as Admin, they are their own Tenant
+            if (user.Role == Domain.Enums.UserRole.Admin)
+            {
+                user.AdminId = user.Id;
+                await _userRepository.UpdateAsync(user);
+            }
 
             var token = _jwtTokenGenerator.GenerateToken(user);
             var response = _mapper.Map<AuthResponseDto>(user);

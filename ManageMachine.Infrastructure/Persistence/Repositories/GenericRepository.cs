@@ -48,9 +48,15 @@ namespace ManageMachine.Infrastructure.Persistence.Repositories
         public async Task<IReadOnlyList<T>> GetAsync(
             Expression<Func<T, bool>>? predicate = null,
             Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null,
-            string? includeProperties = null)
+            string? includeProperties = null,
+            bool ignoreQueryFilters = false)
         {
             IQueryable<T> query = _dbSet;
+
+            if (ignoreQueryFilters)
+            {
+                query = query.IgnoreQueryFilters();
+            }
 
             if (predicate != null)
             {

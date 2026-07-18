@@ -20,15 +20,18 @@ namespace ManageMachine.Application.Services.Implementations
         private readonly IGenericRepository<MachineTransferRequest> _requestRepository;
         private readonly IMachineRepository _machineRepository;
         private readonly IMapper _mapper;
+        private readonly ICurrentUserService _currentUserService;
 
         public RequestService(
             IGenericRepository<MachineTransferRequest> requestRepository,
             IMachineRepository machineRepository,
-            IMapper mapper)
+            IMapper mapper,
+            ICurrentUserService currentUserService)
         {
             _requestRepository = requestRepository;
             _machineRepository = machineRepository;
             _mapper = mapper;
+            _currentUserService = currentUserService;
         }
 
         public async Task<MachineTransferRequestDto> CreateRequestAsync(CreateMachineTransferRequestDto dto, int fromUserId)
@@ -71,7 +74,8 @@ namespace ManageMachine.Application.Services.Implementations
                 ToUserId = dto.ToUserId,
                 RequestType = dto.RequestType,
                 Reason = dto.Reason,
-                Status = RequestStatus.Pending
+                Status = RequestStatus.Pending,
+                AdminId = _currentUserService.AdminId
             };
 
             await _requestRepository.AddAsync(request);

@@ -15,21 +15,25 @@ namespace ManageMachine.Application.Services.Implementations
         private readonly IMachineRepository _machineRepository;
         private readonly IGenericRepository<MachineTransferRequest> _requestRepository;
         private readonly IMapper _mapper;
+        private readonly ICurrentUserService _currentUserService;
 
         public MachineService(
             IMachineRepository machineRepository,
             IGenericRepository<MachineTransferRequest> requestRepository,
-            IMapper mapper)
+            IMapper mapper,
+            ICurrentUserService currentUserService)
         {
             _machineRepository = machineRepository;
 
             _requestRepository = requestRepository;
             _mapper = mapper;
+            _currentUserService = currentUserService;
         }
 
         public async Task<MachineDto> CreateAsync(CreateMachineDto createDto)
         {
             var machine = _mapper.Map<Machine>(createDto);
+            machine.AdminId = _currentUserService.AdminId;
             
             // Generate incremental serial number if not provided
             if (string.IsNullOrWhiteSpace(createDto.SerialNumber))
@@ -147,7 +151,8 @@ namespace ManageMachine.Application.Services.Implementations
                 Status = Domain.Enums.RequestStatus.Approved,
                 Reason = "Machine Returned",
                 CreatedAt = DateTime.UtcNow,
-                ResolvedAt = DateTime.UtcNow
+                ResolvedAt = DateTime.UtcNow,
+                AdminId = _currentUserService.AdminId
             };
             await _requestRepository.AddAsync(returnLog);
 

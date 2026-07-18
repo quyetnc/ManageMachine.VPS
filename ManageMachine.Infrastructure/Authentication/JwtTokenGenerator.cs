@@ -29,6 +29,11 @@ namespace ManageMachine.Infrastructure.Authentication
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
 
+            if (user.AdminId.HasValue)
+            {
+                claims.Add(new Claim("AdminId", user.AdminId.Value.ToString()));
+            }
+
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwtSettings:Secret"] ?? "SuperSecretKey123!@#SuperSecretKey123!@#"));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 

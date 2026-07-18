@@ -51,8 +51,10 @@ export class LoginComponent {
         next: () => {
           // Role Based Redirect
           const user = this.authService.currentUserValue;
-          if (user?.role === 'Admin') {
-            this.router.navigate(['/dashboard']); // Explicitly go to dashboard
+          if (this.authService.isSuperAdmin) {
+            this.router.navigate(['/super-admin']);
+          } else if (user?.role === 'Admin') {
+            this.router.navigate(['/admin/dashboard']); // Explicitly go to dashboard
           } else {
             this.router.navigate(['/public']);
           }

@@ -131,7 +131,7 @@ export class MachineFormComponent implements OnInit {
 
   onSuccess(message: string) {
     this.snackBar.open(message, 'Close', { duration: 3000 });
-    this.router.navigate(['/machines']);
+    this.router.navigate(['/admin/machines']);
   }
 
   handleError(message: string, err: any) {

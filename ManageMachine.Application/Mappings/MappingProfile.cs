@@ -35,6 +35,12 @@ namespace ManageMachine.Application.Mappings
                     .Select(r => (int?)r.Id)
                     .FirstOrDefault()));
             CreateMap<CreateMachineDto, Machine>();
+
+            // User
+            CreateMap<ManageMachine.Application.DTOs.Users.UserDto, User>().ReverseMap();
+            CreateMap<ManageMachine.Application.DTOs.Users.CreateUserDto, User>();
+            CreateMap<ManageMachine.Application.DTOs.Users.UpdateUserDto, User>();
+            CreateMap<User, DTOs.Admin.AdminSummaryDto>();
         }
     }
 }

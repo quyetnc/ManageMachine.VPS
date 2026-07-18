@@ -73,7 +73,7 @@ export class UserFormComponent implements OnInit {
       this.userService.update(this.userId, dto).subscribe({
         next: () => {
           alert('User updated successfully');
-          this.router.navigate(['/users']);
+          this.router.navigate(['/admin/users']);
         },
         error: (err) => alert('Failed to update user: ' + (err.error?.message || err.message || err))
       });
@@ -86,7 +86,7 @@ export class UserFormComponent implements OnInit {
       this.userService.create(dto).subscribe({
         next: () => {
           alert('User created successfully');
-          this.router.navigate(['/users']);
+          this.router.navigate(['/admin/users']);
         },
         error: (err) => alert('Failed to create user: ' + (err.error?.message || err.message || err))
       });

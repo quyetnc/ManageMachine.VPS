@@ -1,7 +1,7 @@
 <div class="list-container">
     <div class="header">
         <h2>Phân loại khí tài</h2>
-        <button mat-raised-button color="primary" routerLink="/machine-types/create">
+        <button mat-raised-button color="primary" routerLink="/admin/machine-types/create">
             <mat-icon>add</mat-icon> Tạo mới
         </button>
     </div>
@@ -21,7 +21,7 @@
             <ng-container matColumnDef="actions">
                 <th mat-header-cell *matHeaderCellDef> Thay đổi </th>
                 <td mat-cell *matCellDef="let row">
-                    <button mat-icon-button color="primary" [routerLink]="['/machine-types/edit', row.id]">
+                    <button mat-icon-button color="primary" [routerLink]="['/admin/machine-types/edit', row.id]">
                         <mat-icon>edit</mat-icon>
                     </button>
                     <button mat-icon-button color="warn" (click)="deleteType(row.id)">

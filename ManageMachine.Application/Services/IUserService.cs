@@ -7,6 +7,7 @@ namespace ManageMachine.Application.Services
     public interface IUserService
     {
         Task<IEnumerable<UserDto>> GetAllUsersAsync();
+        Task<IEnumerable<DTOs.Admin.AdminSummaryDto>> GetAdminsAsync();
         Task<UserDto> CreateUserAsync(CreateUserDto createUserDto);
         Task ResetPasswordAsync(int userId, string newPassword);
         Task<UserDto> UpdateUserAsync(int id, UpdateUserDto updateUserDto);

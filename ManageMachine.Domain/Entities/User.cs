@@ -11,5 +11,7 @@ namespace ManageMachine.Domain.Entities
         public string Email { get; set; } = string.Empty;
         public UserRole Role { get; set; }
         public ICollection<Machine> Machines { get; set; } = new List<Machine>();
+        
+        public int? AdminId { get; set; } // The Tenant ID (If user is Admin, this matches their own Id)
     }
 }

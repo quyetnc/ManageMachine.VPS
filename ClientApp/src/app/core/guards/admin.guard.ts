@@ -13,13 +13,12 @@ export class AdminGuard implements CanActivate {
     ) { }
 
     canActivate(): boolean | UrlTree {
-        const user = this.authService.currentUserValue;
-        if (user && user.role === 'Admin') {
+        if (this.authService.isAdmin) {
             return true;
         }
 
         // Redirect to user portal if logged in but not admin
-        if (user) {
+        if (this.authService.isLoggedIn()) {
             return this.router.createUrlTree(['/public']);
         }
 
